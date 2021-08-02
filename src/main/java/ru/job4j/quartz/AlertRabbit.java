@@ -12,8 +12,9 @@ import static org.quartz.TriggerBuilder.*;
 import static org.quartz.SimpleScheduleBuilder.*;
 
 public class AlertRabbit {
-    public static void main(String[] args) {
-        try (Connection cn = createConnection()) {
+    public static void main(String[] args) throws Exception {
+        Properties properties = getProperties();
+        try (Connection cn = createConnection(properties)) {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
             JobDataMap data = new JobDataMap();
@@ -22,7 +23,7 @@ public class AlertRabbit {
                     .usingJobData(data)
                     .build();
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(Integer.parseInt(readProperties("rabbit.interval")))
+                    .withIntervalInSeconds(Integer.parseInt(properties.getProperty("rabbit.interval")))
                     .repeatForever();
             Trigger trigger = newTrigger()
                     .startNow()
@@ -31,25 +32,23 @@ public class AlertRabbit {
             scheduler.scheduleJob(job, trigger);
             Thread.sleep(10000);
             scheduler.shutdown();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    private static String readProperties(String key) throws IOException {
+    private static Properties getProperties() throws IOException {
         Properties cfg = new Properties();
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
             cfg.load(in);
         }
-        return cfg.getProperty(key);
+        return cfg;
     }
 
-    private static Connection createConnection() throws Exception {
-        Class.forName(readProperties("driver-class-name"));
+    private static Connection createConnection(Properties properties) throws Exception {
+        Class.forName(properties.getProperty("driver-class-name"));
         return DriverManager.getConnection(
-                readProperties("url"),
-                readProperties("username"),
-                readProperties("password")
+                properties.getProperty("url"),
+                properties.getProperty("username"),
+                properties.getProperty("password")
         );
     }
 
