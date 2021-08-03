@@ -3,8 +3,26 @@ package ru.job4j.grabber.utils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
 
 public class SqlRuDateTimeParser implements DateTimeParser {
+
+    private static final Map<String, String> MONTHS = Map.ofEntries(
+           Map.entry("янв", "01"),
+            Map.entry("фев", "02"),
+            Map.entry("мар", "03"),
+            Map.entry("апр", "04"),
+            Map.entry("май", "05"),
+            Map.entry("июн", "06"),
+            Map.entry("июл", "07"),
+            Map.entry("авг", "08"),
+            Map.entry("сен", "09"),
+            Map.entry("окт", "10"),
+            Map.entry("ноя", "11"),
+            Map.entry("дек", "12")
+    );
+    private static final DateTimeFormatter FORMATTER_FOR_DATETIME = DateTimeFormatter.ofPattern("dd MM yy, HH:mm");
 
     @Override
     public LocalDateTime parse(String parse) {
@@ -18,60 +36,16 @@ public class SqlRuDateTimeParser implements DateTimeParser {
         } else {
             parse = dateIsTodayOrYesterday(parse, day);
         }
-        DateTimeFormatter formatterForDateTime = DateTimeFormatter.ofPattern("dd MM yy, HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(parse, formatterForDateTime);
+        LocalDateTime dateTime = LocalDateTime.parse(parse, FORMATTER_FOR_DATETIME);
         return dateTime;
     }
 
     private static String updateMonth(String parse, String month) {
-        String rsl = parse;
-        switch (month) {
-            case "дек":
-                rsl = parse.replace(month, "12");
-                break;
-            case "янв":
-                rsl = parse.replace(month, "01");
-                break;
-            case "фев":
-                rsl = parse.replace(month, "02");
-                break;
-            case "мар":
-                rsl = parse.replace(month, "03");
-                break;
-            case "апр":
-                rsl = parse.replace(month, "04");
-                break;
-            case "май":
-                rsl = parse.replace(month, "05");
-                break;
-            case "июн":
-                rsl = parse.replace(month, "06");
-                break;
-            case "июл":
-                rsl = parse.replace(month, "07");
-                break;
-            case "авг":
-                rsl = parse.replace(month, "08");
-                break;
-            case "сен":
-                rsl = parse.replace(month, "09");
-                break;
-            case "окт":
-                rsl = parse.replace(month, "10");
-                break;
-            case "ноя":
-                rsl = parse.replace(month, "11");
-                break;
-            default:
-                break;
-        }
-        return rsl;
+        return parse.replace(month, MONTHS.get(month));
     }
 
     private static String updateDay(String parse) {
-        StringBuilder sb = new StringBuilder("0");
-        sb.append(parse);
-        return sb.toString();
+        return "0".concat(parse);
     }
 
     private static String dateIsTodayOrYesterday(String parse, String day) {
