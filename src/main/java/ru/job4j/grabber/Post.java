@@ -10,6 +10,21 @@ public class Post {
     private String description;
     private LocalDateTime created;
 
+    public Post() {
+    }
+
+    public Post(String title, String link) {
+        this.title = title;
+        this.link = link;
+    }
+
+    public Post(String title, String link, String description, LocalDateTime created) {
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.created = created;
+    }
+
     public int getId() {
         return id;
     }
@@ -68,5 +83,14 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, link, created);
+    }
+
+    @Override
+    public String toString() {
+        return "Вакансия №" + id + System.lineSeparator()
+                + title  + System.lineSeparator()
+                + link  + System.lineSeparator()
+                + description + System.lineSeparator()
+                + "Дата создания: " + created;
     }
 }
