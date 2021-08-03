@@ -4,6 +4,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.grabber.Post;
+import ru.job4j.grabber.utils.SqlRuDateTimeParser;
+
+import java.io.IOException;
 
 public class SqlRuParse {
     public static void main(String[] args) throws Exception {
@@ -18,5 +22,12 @@ public class SqlRuParse {
                 System.out.println(rowDate.get(i).text());
             }
         }
+    }
+
+    private static void uploadAPostDescriptionAndCreated(Post post) throws IOException {
+        Document doc = Jsoup.connect(post.getLink()).get();
+        post.setDescription(doc.select("table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(2)").text());
+        String date = doc.select("table:nth-child(3) > tbody > tr:nth-child(3)").text();
+        post.setCreated(new SqlRuDateTimeParser().parse(date.split(" \\[")[0]));
     }
 }
