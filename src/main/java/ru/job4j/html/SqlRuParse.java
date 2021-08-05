@@ -54,13 +54,22 @@ public class SqlRuParse implements Parse {
         public Post detail(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
         String table = "table:nth-child(3)";
-        Elements pages = doc.select("#content-wrapper-forum > table:nth-child(2) > tbody > tr > td > a");
+
+        /* pages содержит ссылки для перехода на другие страницы обсуждения и, если его размер не равен нулю, значит в данном обсуждении
+            несколько страниц, следовательно, ссылки на имя, дату и описание в первом посте будут отличаться. Также, чтобы
+            получить дату обновления, придётся получить дату последнего поста на последней странице*/
+        Elements pages = doc.select("table:nth-child(2) > tbody > tr > td > a");
         if (pages.size() != 0) {
             table = "table:nth-child(4)";
         }
+
+        /*Создаём переменные, содержащие описание вакансии, название (без даты обновления), дату создания в формате String
+        Ссылки будут разные для одно- и многостраничного обсуждения, они зависят от переменной table. */
         String description =  doc.select(table.concat(" > tbody > tr:nth-child(2) > td:nth-child(2)")).text();
         String created = doc.select(table.concat(" > tbody > tr:nth-child(3)")).text().split(" \\[")[0];
         String name = doc.select(table.concat(" > tbody > tr:nth-child(1)")).get(0).text().replace(" [new]", "");
+
+        /*Если в обсуждении много страниц, то создаём Document для парсинга HTML последней страницы для получения даты обновления*/
         if (pages.size() != 0) {
             doc = createDocForLastPage(pages);
         }
