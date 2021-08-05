@@ -59,9 +59,9 @@ public class SqlRuParse implements Parse {
 
     /**
      * Принимает ссылку на вакансию и возвращает обЪект Post с её описанием. Локальная переменная Elements pages
-     * служит для определения - одну или несколько страниц имеет обсуждение вакансии по данной ссылке. От этого фактора
-     * ззависят аттрибуты для получения текста, который содержит информацию о вакансии. Также для многостраничного обсуждения
-     * требуется получить объект Document для чтения последней страницы, чтобы извлечь дату одновления.
+     * служит для определения - одну или несколько страниц имеет обсуждение вакансии по данной ссылке. Для
+     * многостраничного обсуждения требуется получить объект Document для чтения последней страницы, чтобы
+     * извлечь дату одновления.
      * @param link ссылка на вакансию
      * @return объект Post с ненулевыми полями title, link, created, description
      * @throws IOException
@@ -69,17 +69,12 @@ public class SqlRuParse implements Parse {
         @Override
         public Post detail(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
-        String table = "table:nth-child(3)";
         Elements pages = doc.select("table:nth-child(2) > tbody > tr > td > a");
-        boolean multiplePages = pages.size() != 0;
-        if (multiplePages) {
-            table = "table:nth-child(4)";
-        }
-        Post post = createPostWithoutDateOfUpdate(doc, table, link);
-        if (multiplePages) {
+        Post post = createPostWithoutDateOfUpdate(doc, link);
+        if (pages.size() != 0) {
             doc = createDocForLastPage(pages);
         }
-        Elements rowDate = doc.select("tr:nth-child(3) > td");
+        Elements rowDate = doc.select(".msgFooter");
         post.setTitle(String.format(
                 "%s%sДата обновления: %s", post.getTitle(), System.lineSeparator(), rowDate.get(rowDate.size() - 1).text().split(" \\[")[0]
         ));
@@ -90,14 +85,13 @@ public class SqlRuParse implements Parse {
      *
      * @param doc объет типа Document, который позволяет нам парсить первую страницу обсуждения вакансии,
      * на которой находится всё основное описание
-     * @param table аттрибут тега HTML, который будет различен для одностраничного и многостраничного обсуждения.
      * @param link ссылка на вакансию
      * @return объект Post, в качестве поля title содержит имя вакансии без даты обновления
      */
-    private Post createPostWithoutDateOfUpdate(Document doc, String table, String link) {
-        String name = doc.select(table.concat(" > tbody > tr:nth-child(1)")).get(0).text().replace(" [new]", "");
-        String description =  doc.select(table.concat(" > tbody > tr:nth-child(2) > td:nth-child(2)")).text();
-        String created = doc.select(table.concat(" > tbody > tr:nth-child(3)")).text().split(" \\[")[0];
+    private Post createPostWithoutDateOfUpdate(Document doc, String link) {
+        String name = doc.title().split(" / ")[0];
+        String description =  doc.select(".msgBody").get(1).text();
+        String created = doc.select(".msgFooter").get(0).text().split(" \\[")[0];
         return new Post(name, link, description, this.dateTimeParser.parse(created));
     }
 
