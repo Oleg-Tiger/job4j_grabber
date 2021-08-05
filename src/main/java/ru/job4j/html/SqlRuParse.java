@@ -31,6 +31,13 @@ public class SqlRuParse implements Parse {
         System.out.println(post2);
     }
 
+    /**
+     * Данный метод принимает в качестве аргумента ссылку на сайт вакансий и возвращает список объектов Post,
+     * каждый из которых содержит ненулевые поля title и link
+     * @param link Ссылка на сайт с вакансиями
+     * @return List объектов Post c идентифицированными полями link и title
+     * @throws IOException
+     */
     @Override
     public List<Post> list(String link) throws IOException {
         List<Post> rsl = new ArrayList<>();
@@ -50,40 +57,55 @@ public class SqlRuParse implements Parse {
         return rsl;
     }
 
+    /**
+     * Принимает ссылку на вакансию и возвращает обЪект Post с её описанием. Локальная переменная Elements pages
+     * служит для определения - одну или несколько страниц имеет обсуждение вакансии по данной ссылке. От этого фактора
+     * ззависят аттрибуты для получения текста, который содержит информацию о вакансии. Также для многостраничного обсуждения
+     * требуется получить объект Document для чтения последней страницы, чтобы извлечь дату одновления.
+     * @param link ссылка на вакансию
+     * @return объект Post с ненулевыми полями title, link, created, description
+     * @throws IOException
+     */
         @Override
         public Post detail(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
         String table = "table:nth-child(3)";
-
-        /* pages содержит ссылки для перехода на другие страницы обсуждения и, если его размер не равен нулю, значит в данном обсуждении
-            несколько страниц, следовательно, ссылки на имя, дату и описание в первом посте будут отличаться. Также, чтобы
-            получить дату обновления, придётся получить дату последнего поста на последней странице */
-
         Elements pages = doc.select("table:nth-child(2) > tbody > tr > td > a");
-        if (pages.size() != 0) {
+        boolean multiplePages = pages.size() != 0;
+        if (multiplePages) {
             table = "table:nth-child(4)";
         }
-
-        /* Создаём переменные, содержащие описание вакансии, название (без даты обновления), дату создания в формате String
-        Ссылки будут разные для одно- и многостраничного обсуждения, они зависят от переменной table */
-
-        String description =  doc.select(table.concat(" > tbody > tr:nth-child(2) > td:nth-child(2)")).text();
-        String created = doc.select(table.concat(" > tbody > tr:nth-child(3)")).text().split(" \\[")[0];
-        String name = doc.select(table.concat(" > tbody > tr:nth-child(1)")).get(0).text().replace(" [new]", "");
-
-        /* Если в обсуждении много страниц, то создаём Document для парсинга HTML последней страницы для получения даты обновления
-        Либо продолжаем читать с первой страницы */
-
-        if (pages.size() != 0) {
+        Post post = createPostWithoutDateOfReplace(doc, table, link);
+        if (multiplePages) {
             doc = createDocForLastPage(pages);
         }
         Elements rowDate = doc.select("tr:nth-child(3) > td");
-        String title = String.format(
-                    "%s%sДата обновления: %s", name, System.lineSeparator(), rowDate.get(rowDate.size() - 1).text().split(" \\[")[0]
-            );
-            return new Post(title, link, description, this.dateTimeParser.parse(created));
+        post.setTitle(String.format(
+                "%s%sДата обновления: %s", post.getTitle(), System.lineSeparator(), rowDate.get(rowDate.size() - 1).text().split(" \\[")[0]
+        ));
+            return post;
     }
 
+    /**
+     *
+     * @param doc объет типа Document, который позволяет нам парсить первую страницу обсуждения вакансии,
+     * на которой находится всё основное описание
+     * @param table аттрибут тега HTML, который будет различен для одностраничного и многостраничного обсуждения.
+     * @param link ссылка на вакансию
+     * @return объект Post, в качестве поля title содержит имя вакансии без даты обновления
+     */
+    private Post createPostWithoutDateOfReplace(Document doc, String table, String link) {
+        String name = doc.select(table.concat(" > tbody > tr:nth-child(1)")).get(0).text().replace(" [new]", "");
+        String description =  doc.select(table.concat(" > tbody > tr:nth-child(2) > td:nth-child(2)")).text();
+        String created = doc.select(table.concat(" > tbody > tr:nth-child(3)")).text().split(" \\[")[0];
+        return new Post(name, link, description, this.dateTimeParser.parse(created));
+    }
+
+    /**
+     * @param pages содержит ссылки для перехода на другие страница обсуждения
+     * @return объект Document для чтения HTML с последней страницы обсуждения
+     * @throws IOException
+     */
     private Document createDocForLastPage(Elements pages) throws IOException {
             String linkOfLastPage = pages.get(pages.size() - 3).attr("href");
             return Jsoup.connect(linkOfLastPage).get();
