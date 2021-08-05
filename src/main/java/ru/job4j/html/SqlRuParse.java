@@ -75,7 +75,7 @@ public class SqlRuParse implements Parse {
         if (multiplePages) {
             table = "table:nth-child(4)";
         }
-        Post post = createPostWithoutDateOfReplace(doc, table, link);
+        Post post = createPostWithoutDateOfUpdate(doc, table, link);
         if (multiplePages) {
             doc = createDocForLastPage(pages);
         }
@@ -94,7 +94,7 @@ public class SqlRuParse implements Parse {
      * @param link ссылка на вакансию
      * @return объект Post, в качестве поля title содержит имя вакансии без даты обновления
      */
-    private Post createPostWithoutDateOfReplace(Document doc, String table, String link) {
+    private Post createPostWithoutDateOfUpdate(Document doc, String table, String link) {
         String name = doc.select(table.concat(" > tbody > tr:nth-child(1)")).get(0).text().replace(" [new]", "");
         String description =  doc.select(table.concat(" > tbody > tr:nth-child(2) > td:nth-child(2)")).text();
         String created = doc.select(table.concat(" > tbody > tr:nth-child(3)")).text().split(" \\[")[0];
