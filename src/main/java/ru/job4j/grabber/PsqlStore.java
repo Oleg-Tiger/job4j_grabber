@@ -3,8 +3,7 @@ package ru.job4j.grabber;
 import ru.job4j.grabber.utils.SqlRuDateTimeParser;
 import ru.job4j.html.SqlRuParse;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,7 @@ public class PsqlStore implements Store, AutoCloseable {
             cnn = DriverManager.getConnection(
                     cfg.getProperty("url"), cfg.getProperty("username"), cfg.getProperty("password")
             );
+            createTable();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -93,6 +93,20 @@ public class PsqlStore implements Store, AutoCloseable {
     public void close() throws Exception {
         if (cnn != null) {
             cnn.close();
+        }
+    }
+
+    private void createTable() {
+        StringBuilder sql = new StringBuilder();
+        try (Statement statement = cnn.createStatement();
+             BufferedReader reader = new BufferedReader(new FileReader("./db/scripts/posts.sql"))
+        ) {
+            while (reader.ready()) {
+               sql.append(reader.readLine());
+            }
+            statement.execute(sql.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
