@@ -1,6 +1,7 @@
 package ru.job4j.grabber;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Post {
@@ -100,6 +101,6 @@ public class Post {
                 + title  + System.lineSeparator()
                 + link  + System.lineSeparator()
                 + description + System.lineSeparator()
-                + "Дата создания: " + created;
+                + "Дата создания: " + created.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
     }
 }
