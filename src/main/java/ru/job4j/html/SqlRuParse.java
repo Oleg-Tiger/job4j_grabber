@@ -29,13 +29,16 @@ public class SqlRuParse implements Parse {
         System.out.println();
         Post post2 = srp.detail("https://www.sql.ru/forum/1332112-1/programmist-prikladnogo-po-c-po-produktu-polator");
         System.out.println(post2);
+        System.out.println();
+        List<Post> list = srp.list("https://www.sql.ru/forum/job-offers");
+        list.forEach(System.out::println);
     }
 
     /**
      * Данный метод принимает в качестве аргумента ссылку на сайт вакансий и возвращает список объектов Post,
-     * каждый из которых содержит ненулевые поля title и link
+     * каждый из которых содержит ненулевые поля title, link и created
      * @param link Ссылка на сайт с вакансиями
-     * @return List объектов Post c идентифицированными полями link и title
+     * @return List объектов Post c инициализированными полями link и title
      * @throws IOException
      */
     @Override
@@ -51,7 +54,9 @@ public class SqlRuParse implements Parse {
                 String title = String.format(
                         "%s%sДата обновления: %s", href.text(), System.lineSeparator(), rowDate.get(i).text()
                         );
-                rsl.add(new Post(title, postLink));
+                Document forPostLink = Jsoup.connect(postLink).get();
+                String created = forPostLink.select(".msgFooter").get(0).text().split(" \\[")[0];
+                rsl.add(new Post(title, postLink, this.dateTimeParser.parse(created)));
             }
         }
         return rsl;
