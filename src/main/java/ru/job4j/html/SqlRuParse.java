@@ -51,12 +51,8 @@ public class SqlRuParse implements Parse {
             for (int i = 0; i < row.size(); i++) {
                 Element href = row.get(i).child(0);
                 String postLink = href.attr("href");
-                String title = String.format(
-                        "%s%sДата обновления: %s", href.text(), System.lineSeparator(), rowDate.get(i).text()
-                        );
-                Document forPostLink = Jsoup.connect(postLink).get();
-                String created = forPostLink.select(".msgFooter").get(0).text().split(" \\[")[0];
-                rsl.add(new Post(title, postLink, this.dateTimeParser.parse(created)));
+                String title = href.text();
+                rsl.add(new Post(title, postLink, this.dateTimeParser.parse(rowDate.get(i).text())));
             }
         }
         return rsl;

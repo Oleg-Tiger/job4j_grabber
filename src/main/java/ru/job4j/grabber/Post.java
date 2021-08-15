@@ -101,6 +101,6 @@ public class Post {
                 + title  + System.lineSeparator()
                 + link  + System.lineSeparator()
                 + description + System.lineSeparator()
-                + "Дата создания: " + created.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
+                + created.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
     }
 }
