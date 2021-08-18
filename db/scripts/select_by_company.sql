@@ -26,6 +26,6 @@ select c.name, count(*) as persons_count
 from person p join company c on p.company_id = c.id
 group by c.name
 having count(*) = (select max(persons_count)
-				   from (select c.name, count(*) as persons_count
+				   from (select count(*) as persons_count
 						 from person p join company c on p.company_id = c.id
-						 group by c.name)t1);
+						 group by c)t1);
