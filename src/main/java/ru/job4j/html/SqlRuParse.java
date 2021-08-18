@@ -38,7 +38,7 @@ public class SqlRuParse implements Parse {
      * Данный метод принимает в качестве аргумента ссылку на сайт вакансий и возвращает список объектов Post,
      * каждый из которых содержит ненулевые поля title, link и created
      * @param link Ссылка на сайт с вакансиями
-     * @return List объектов Post c инициализированными полями link и title
+     * @return List объектов Post c инициализированными полями link,title и created
      * @throws IOException
      */
     @Override
