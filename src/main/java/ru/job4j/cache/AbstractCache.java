@@ -15,10 +15,10 @@ public abstract class AbstractCache<K, V> {
 
     public V get(K key) {
         if (cache.containsKey(key)) {
-            Object strong = cache.get(key).get();
+            V strong = cache.get(key).get();
             if (strong != null) {
                 System.out.println("Файл есть в кэше, получаем его:");
-                return (V) strong;
+                return strong;
             }
         }
         System.out.println("Файла нет в кэше");

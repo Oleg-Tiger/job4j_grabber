@@ -1,14 +1,14 @@
 package ru.job4j.cache;
 
 public class Emulator {
-    private AbstractCache dirFileCache;
+    private AbstractCache<String, String> dirFileCache;
 
     public void setDirectory(String directory) {
         dirFileCache = new DirFileCache(directory);
     }
 
     public String getFile(String key) {
-        return (String) dirFileCache.get(key);
+        return dirFileCache.get(key);
     }
 
     public void loadFile(String key) {
