@@ -1,5 +1,6 @@
 package ru.job4j.cache;
 
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +14,16 @@ public abstract class AbstractCache<K, V> {
         cache.put(key, val);
     }
 
-    public V get(K key) {
-        if (cache.containsKey(key)) {
-            V strong = cache.get(key).get();
-            if (strong != null) {
-                System.out.println("Файл есть в кэше, получаем его:");
-                return strong;
+    public V get(K key) throws IOException {
+            V strong = cache.getOrDefault(key, new SoftReference<>(null)).get();
+            if (strong == null) {
+                System.out.println("файл не загружен в кэш");
+                strong = load(key);
+                put(key, strong);
             }
-        }
-        System.out.println("Файла нет в кэше");
-       return load(key);
+            System.out.println("файл загружен в кэш:");
+            return strong;
     }
 
-    protected abstract V load(K key);
+    protected abstract V load(K key) throws IOException;
 }
