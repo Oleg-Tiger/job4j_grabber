@@ -14,7 +14,7 @@ public abstract class AbstractCache<K, V> {
         cache.put(key, val);
     }
 
-    public V get(K key) throws IOException {
+    public V get(K key) {
             V strong = cache.getOrDefault(key, new SoftReference<>(null)).get();
             if (strong == null) {
                 System.out.println("файл не загружен в кэш");
@@ -25,5 +25,5 @@ public abstract class AbstractCache<K, V> {
             return strong;
     }
 
-    protected abstract V load(K key) throws IOException;
+    protected abstract V load(K key);
 }

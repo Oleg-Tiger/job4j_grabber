@@ -1,11 +1,16 @@
 package ru.job4j.cache;
 
-import java.io.IOException;
 import java.lang.ref.SoftReference;
 
 public class Emulator {
-    private AbstractCache<String, String> dirFileCache;
+
     private String fileName;
+    private AbstractCache<String, String> dirFileCache;
+
+    public Emulator(String directory, String fileName) {
+        this.dirFileCache = new DirFileCache(directory);
+        this.fileName = fileName;
+    }
 
     public void setDirectory(String directory) {
         dirFileCache = new DirFileCache(directory);
@@ -15,11 +20,11 @@ public class Emulator {
         this.fileName = fileName;
     }
 
-    public String getFile() throws IOException {
+    public String getFile() {
         return dirFileCache.get(fileName);
     }
 
-    public void loadFile() throws IOException {
+    public void loadFile() {
         String strong = dirFileCache.cache.getOrDefault(fileName, new SoftReference<>(null)).get();
         if (strong == null) {
             System.out.println("файл не загружен в кэш");
@@ -28,10 +33,8 @@ public class Emulator {
         System.out.println("файл загружен в кэш");
     }
 
-    public static void main(String[] args) throws IOException {
-        Emulator emulator = new Emulator();
-        emulator.setDirectory(".");
-        emulator.setFileName("1.txt");
+    public static void main(String[] args) {
+        Emulator emulator = new Emulator(".", "1.txt");
         System.out.println(emulator.getFile());
         System.out.println(emulator.getFile());
         emulator.setFileName("2.txt");

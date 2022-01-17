@@ -13,9 +13,14 @@ public class DirFileCache extends AbstractCache<String, String> {
     }
 
     @Override
-    protected String load(String key) throws IOException {
+    protected String load(String key) {
         System.out.println("загружаем файл в кэш");
-        String rsl = Files.readString(Path.of(cachingDir, key));
+        String rsl = null;
+        try {
+            rsl = Files.readString(Path.of(cachingDir, key));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return rsl;
     }
 }
