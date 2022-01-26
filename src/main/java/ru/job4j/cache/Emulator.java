@@ -1,16 +1,12 @@
 package ru.job4j.cache;
 
 import java.lang.ref.SoftReference;
+import java.util.Scanner;
 
 public class Emulator {
 
     private String fileName;
     private AbstractCache<String, String> dirFileCache;
-
-    public Emulator(String directory, String fileName) {
-        this.dirFileCache = new DirFileCache(directory);
-        this.fileName = fileName;
-    }
 
     public void setDirectory(String directory) {
         dirFileCache = new DirFileCache(directory);
@@ -33,13 +29,40 @@ public class Emulator {
         System.out.println("файл загружен в кэш");
     }
 
-    public static void main(String[] args) {
-        Emulator emulator = new Emulator(".", "1.txt");
-        System.out.println(emulator.getFile());
-        System.out.println(emulator.getFile());
-        emulator.setFileName("2.txt");
-        emulator.loadFile();
+    private void showMenu() {
         System.out.println();
-        System.out.println(emulator.getFile());
+        System.out.println("Выберите действие, введите число от 1 до 5:");
+        System.out.println("1. Указать кэшируемую директорию");
+        System.out.println("2. Указать имя файла");
+        System.out.println("3. Загрузить содержимое файла в кэш");
+        System.out.println("4. Получить содержимое файла из кэша");
+        System.out.println("5. Выйти");
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Emulator emulator = new Emulator();
+        emulator.showMenu();
+        String answer = sc.nextLine();
+        while (!answer.equals("5")) {
+            switch (answer) {
+                case "1" -> {
+                    System.out.println("Укажите кэшируемую директорию");
+                    emulator.setDirectory(sc.nextLine());
+                }
+                case "2" -> {
+                    System.out.println("Укажите имя файла");
+                    emulator.setFileName(sc.nextLine());
+                }
+                case "3" -> emulator.loadFile();
+                case "4" -> System.out.println(emulator.getFile());
+                default -> System.out.println("Введено некорректное значение, повторите ввод");
+            }
+            emulator.showMenu();
+            answer = sc.nextLine();
+        }
     }
 }
+
+
+
