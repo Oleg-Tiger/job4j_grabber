@@ -56,10 +56,13 @@ public class Emulator {
                     break;
                 case "3":
                     emulator.loadFile();
+                    break;
                 case "4":
                     System.out.println(emulator.getFile());
+                    break;
                 default:
                     System.out.println("Введено некорректное значение, повторите ввод");
+                    break;
             }
             emulator.showMenu();
             answer = sc.nextLine();
