@@ -46,17 +46,20 @@ public class Emulator {
         String answer = sc.nextLine();
         while (!answer.equals("5")) {
             switch (answer) {
-                case "1" -> {
+                case "1":
                     System.out.println("Укажите кэшируемую директорию");
                     emulator.setDirectory(sc.nextLine());
-                }
-                case "2" -> {
+                    break;
+                case "2":
                     System.out.println("Укажите имя файла");
                     emulator.setFileName(sc.nextLine());
-                }
-                case "3" -> emulator.loadFile();
-                case "4" -> System.out.println(emulator.getFile());
-                default -> System.out.println("Введено некорректное значение, повторите ввод");
+                    break;
+                case "3":
+                    emulator.loadFile();
+                case "4":
+                    System.out.println(emulator.getFile());
+                default:
+                    System.out.println("Введено некорректное значение, повторите ввод");
             }
             emulator.showMenu();
             answer = sc.nextLine();
