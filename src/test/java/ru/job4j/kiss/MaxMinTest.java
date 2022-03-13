@@ -1,5 +1,6 @@
 package ru.job4j.kiss;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -44,5 +45,12 @@ public class MaxMinTest {
         list.add(10);
         list.add(0);
         assertThat(MaxMin.min(list, Comparator.reverseOrder()), is(10));
+    }
+
+    @Test
+    public void whenListIsEmpty() {
+        List<Integer> list = new ArrayList<>();
+        Assert.assertNull(MaxMin.max(list, Comparator.naturalOrder()));
+        Assert.assertNull(MaxMin.min(list, Comparator.naturalOrder()));
     }
 }

@@ -9,14 +9,9 @@ public class MaxMin {
 
     static  <T> T find(List<T> value, BiPredicate<T, T> predicate) {
         T rsl = null;
-        if (value.size() > 0) {
-            rsl = value.get(0);
             for (T t : value) {
-                if (predicate.test(rsl, t)) {
-                    rsl = t;
-                }
+             rsl = rsl == null || predicate.test(rsl, t) ? t : rsl;
             }
-        }
         return rsl;
     }
 
