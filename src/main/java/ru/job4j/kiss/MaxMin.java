@@ -7,9 +7,12 @@ import java.util.function.BiPredicate;
 public class MaxMin {
 
     static  <T> T find(List<T> value, BiPredicate<T, T> predicate) {
-        T rsl = null;
+       if (value.isEmpty()) {
+           return null;
+       }
+        T rsl = value.get(0);
             for (T t : value) {
-             rsl = rsl == null || predicate.test(rsl, t) ? t : rsl;
+             rsl = predicate.test(rsl, t) ? t : rsl;
             }
         return rsl;
     }
