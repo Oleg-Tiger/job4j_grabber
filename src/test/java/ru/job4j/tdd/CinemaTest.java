@@ -23,14 +23,34 @@ public class CinemaTest {
     }
 
     @Ignore
-    @Test
-    public void whenNotBuy() {
+    @Test(expected = IllegalArgumentException.class)
+    public void whenInvalidPlace() {
         Account account = new AccountCinema();
         Cinema cinema = new Cinema3D();
         Calendar date = Calendar.getInstance();
         date.set(2020, 10, 10, 23, 00);
         Ticket ticket = cinema.buy(account, 0, 0, date);
-        assertNull(ticket);
+    }
+
+    @Ignore
+    @Test(expected = IllegalArgumentException.class)
+    public void whenInvalidDate() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2020, 10, 0, 23, 00);
+        Ticket ticket = cinema.buy(account, 1, 1, date);
+    }
+
+    @Ignore
+    @Test(expected = IllegalArgumentException.class)
+    public void whenPlaceIsOccupied() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        date.set(2020, 10, 10, 23, 00);
+        Ticket ticket = cinema.buy(account, 1, 1, date);
+        Ticket ticket2 = cinema.buy(account, 1, 1, date);
     }
 
     @Ignore
@@ -50,5 +70,4 @@ public class CinemaTest {
         List<Session> sessions = cinema.find(session -> false);
         assertThat(sessions.size(), is(0));
     }
-
 }
