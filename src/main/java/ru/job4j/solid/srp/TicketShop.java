@@ -12,6 +12,12 @@ import java.util.List;
  * использовать Set. Но в нашем случае класс сам создаёт и инициализирует объект.
  * То есть при создании объекта - нет возможности заменить List на Set. Это можно исправить,
  * заменив тип поля buyers на Collection, и инициализировать это поле в конструкторе так, как необходимо.
+ *
+ * Допустим, со временем мы решили внедрить функцию отправки СМС пользователю с подтверждением заказа.
+ * Мы могли бы добавить необходимый для этого метод sendSMS() и изменить метод buy(). Но тут уже идёт нарушение
+ * принципа OCP. Чтобы не нарушать его - вместо изменений надо сделать расширение. Создать класс - наследник TicketShop
+ * и добавить и переопределить в нём необходимые методы. Или, как вариант создать новый класс, реализующий интерфейс
+ * Shop.
  */
 
 public class TicketShop implements Shop {
@@ -30,6 +36,12 @@ public class TicketShop implements Shop {
         Buyer buyer = new Buyer(name, id);
         purchaseRegistrationInTheSystem(buyer);
         buyers.add(buyer);
+        sendSms(id);
+
+    }
+
+    private void sendSms(int id) {
+        System.out.println("Отправляем SMS пользователю с информацией по заказу");
     }
 
     private static void purchaseRegistrationInTheSystem(Buyer buyer) {
