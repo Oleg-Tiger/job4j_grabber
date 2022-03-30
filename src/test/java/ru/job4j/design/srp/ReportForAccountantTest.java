@@ -20,7 +20,7 @@ public class ReportForAccountantTest {
                 .append(ivan.getName()).append(";")
                 .append(ivan.getHired()).append(";")
                 .append(ivan.getFired()).append(";")
-                .append(ivan.getSalary() * 0.01159).append(";")
+                .append(ivan.getSalary() * ConverterToDollar.COURSE).append(";")
                 .append(System.lineSeparator());
         assertThat(accountant.generate(em -> true), is(expect.toString()));
     }

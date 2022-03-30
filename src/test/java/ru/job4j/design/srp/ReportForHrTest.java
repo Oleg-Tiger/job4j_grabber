@@ -17,7 +17,7 @@ public class ReportForHrTest {
         store.add(ivan);
         store.add(oleg);
         store.add(alex);
-        Report hr = new ReportForHr(store);
+        Report hr = new ReportForHr(store, new SalarySort().reversed());
         StringBuilder expect = new StringBuilder()
                 .append("Name; Salary;")
                 .append(System.lineSeparator())
