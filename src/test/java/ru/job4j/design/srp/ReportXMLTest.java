@@ -1,6 +1,5 @@
 package ru.job4j.design.srp;
 
-
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
@@ -10,7 +9,6 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import static org.junit.Assert.assertTrue;
 
 
