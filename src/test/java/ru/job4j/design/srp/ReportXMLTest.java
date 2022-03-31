@@ -8,9 +8,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertTrue;
@@ -34,14 +32,12 @@ public class ReportXMLTest {
         store.add(worker);
         Report xml = new ReportXML(store);
         String result = xml.generate(em -> true);
-        System.out.println(result);
         String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<employees><employees name=\"Ivan\">"
                 + "<hired>2022-03-31T23:23:23+03:00</hired>"
                 + "<fired>2022-03-31T23:23:23+03:00</fired>"
                 + "<salary>100000.0</salary>"
                 + "</employees></employees>";
-        System.out.println(expected);
         Diff diff = new Diff(expected, result);
         assertTrue(diff.similar());
     }
