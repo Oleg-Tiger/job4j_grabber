@@ -1,20 +1,36 @@
 package ru.job4j.design.srp;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Employee {
+
+    @XmlAttribute
     private String name;
+
     private Calendar hired;
     private Calendar fired;
     private double salary;
 
+    public Employee() {
+
+    }
+
     public Employee(String name, Calendar hired, Calendar fired, double salary) {
+
         this.name = name;
         this.hired = hired;
         this.fired = fired;
         this.salary = salary;
     }
+
 
     public String getName() {
         return name;
@@ -63,5 +79,26 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @XmlRootElement(name = "employees")
+    public static class Employees {
+
+        private List<Employee> employees;
+
+        public Employees() {
+        }
+
+        public Employees(List<Employee> employees) {
+            this.employees = employees;
+        }
+
+        public List<Employee> getEmployees() {
+            return employees;
+        }
+
+        public void setEmployees(List<Employee> employees) {
+            this.employees = employees;
+        }
     }
 }
