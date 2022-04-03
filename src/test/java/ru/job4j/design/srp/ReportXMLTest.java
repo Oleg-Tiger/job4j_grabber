@@ -20,7 +20,7 @@ public class ReportXMLTest {
     }
 
     @Test
-    public void whenReportXML() {
+    public void whenReportXML() throws IOException, SAXException {
         MemStore store = new MemStore();
         Calendar date = new GregorianCalendar();
         date.set(2022, 02, 31, 23, 23, 23);
@@ -35,14 +35,7 @@ public class ReportXMLTest {
                 + "<fired>2022-03-31T23:23:23+03:00</fired>"
                 + "<salary>100000.0</salary>"
                 + "</employees></employees>";
-        Diff diff = null;
-        try {
-            diff = new Diff(expected, result);
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Diff diff = new Diff(expected, result);
         assertTrue(diff.similar());
     }
 }
