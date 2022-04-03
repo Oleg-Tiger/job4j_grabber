@@ -5,7 +5,6 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,7 +20,7 @@ public class ReportXMLTest {
     }
 
     @Test
-    public void whenReportXML() throws JAXBException, IOException, SAXException {
+    public void whenReportXML() {
         MemStore store = new MemStore();
         Calendar date = new GregorianCalendar();
         date.set(2022, 02, 31, 23, 23, 23);
@@ -36,7 +35,14 @@ public class ReportXMLTest {
                 + "<fired>2022-03-31T23:23:23+03:00</fired>"
                 + "<salary>100000.0</salary>"
                 + "</employees></employees>";
-        Diff diff = new Diff(expected, result);
+        Diff diff = null;
+        try {
+            diff = new Diff(expected, result);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         assertTrue(diff.similar());
     }
 }

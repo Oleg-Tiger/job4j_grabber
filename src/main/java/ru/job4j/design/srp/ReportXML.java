@@ -15,16 +15,18 @@ public class ReportXML implements Report {
         this.store = store;
     }
 
-    public String generate(Predicate<Employee> filter) throws JAXBException {
+    public String generate(Predicate<Employee> filter) {
         var employees = store.findBy(filter);
-        JAXBContext context = JAXBContext.newInstance(Employee.Employees.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         String xml = "";
         try (StringWriter writer = new StringWriter()) {
+            JAXBContext context = JAXBContext.newInstance(Employee.Employees.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.marshal(new Employee.Employees(employees), writer);
             xml = writer.getBuffer().toString();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
             e.printStackTrace();
         }
         return xml;

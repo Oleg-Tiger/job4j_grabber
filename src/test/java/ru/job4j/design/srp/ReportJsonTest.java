@@ -3,15 +3,13 @@ package ru.job4j.design.srp;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
-
-import javax.xml.bind.JAXBException;
 import java.util.Calendar;
 
 
 public class ReportJsonTest {
 
     @Test
-    public void whenReportJson() throws JAXBException {
+    public void whenReportJson() {
         MemStore store = new MemStore();
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
