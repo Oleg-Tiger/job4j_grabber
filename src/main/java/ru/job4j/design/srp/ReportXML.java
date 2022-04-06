@@ -1,9 +1,8 @@
 package ru.job4j.design.srp;
 
+import ru.job4j.design.srp.Employee.Employees;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.function.Predicate;
 
@@ -16,17 +15,15 @@ public class ReportXML implements Report {
     }
 
     public String generate(Predicate<Employee> filter) {
-        var employees = store.findBy(filter);
+        Employees employees = new Employees(store.findBy(filter));
         String xml = "";
         try (StringWriter writer = new StringWriter()) {
-            JAXBContext context = JAXBContext.newInstance(Employee.Employees.class);
+            JAXBContext context = JAXBContext.newInstance(Employees.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(new Employee.Employees(employees), writer);
+            marshaller.marshal(employees, writer);
             xml = writer.getBuffer().toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return xml;

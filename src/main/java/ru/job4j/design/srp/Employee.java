@@ -1,21 +1,19 @@
 package ru.job4j.design.srp;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Employee {
 
     @XmlAttribute
     private String name;
-
+    @XmlJavaTypeAdapter(CalendarInXml.class)
     private Calendar hired;
+    @XmlJavaTypeAdapter(CalendarInXml.class)
     private Calendar fired;
     private double salary;
 
@@ -82,8 +80,9 @@ public class Employee {
     }
 
     @XmlRootElement(name = "employees")
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Employees {
-
+        @XmlElement(name = "employee")
         private List<Employee> employees;
 
         public Employees() {
