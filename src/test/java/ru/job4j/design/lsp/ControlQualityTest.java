@@ -11,18 +11,18 @@ import static org.junit.Assert.assertTrue;
 public class ControlQualityTest  {
 
     @Test
-    public void whenPercentLifeTimeLess25AndAddToWarehouse() {
+    public void whenPercentLifeTimeLess25ThenAddToWarehouse() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(0), new Trash()
         ));
         Food milk = new Milk("Молоко", LocalDate.now().plusDays(65), LocalDate.now().minusDays(20), 100);
         controlQuality.addToStorage(milk);
-        Assert.assertEquals(milk.getPercentLifeTimePassed(),24.4, 0.1);
+        Assert.assertEquals(milk.getPercentLifeTimePassed(), 24.4, 0.1);
         assertThat(controlQuality.getStorages().get(0).getProducts().get(0), is(milk));
     }
 
     @Test
-    public void whenPercentLifeTimeIs25AndAddToShopWithoutDiscount() {
+    public void whenPercentLifeTimeIs25ThenAddToShopWithoutDiscount() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(20), new Trash()
         ));
@@ -34,7 +34,7 @@ public class ControlQualityTest  {
     }
 
     @Test
-    public void whenPercentLifeTimeIs75AndAddToShopWithoutDiscount() {
+    public void whenPercentLifeTimeIs75ThenAddToShopWithoutDiscount() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(20), new Trash()
         ));
@@ -46,7 +46,7 @@ public class ControlQualityTest  {
     }
 
     @Test
-    public void whenPercentLifeTimeMore75AndAddToShopWithDiscount() {
+    public void whenPercentLifeTimeMore75ThenAddToShopWithDiscount() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(20), new Trash()
         ));
@@ -58,19 +58,19 @@ public class ControlQualityTest  {
     }
 
     @Test
-    public void whenPercentLifeTimeIs100AndAddToShopWithDiscount() {
+    public void whenPercentLifeTimeIs100ThenAddToShopWithDiscount() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(42), new Trash()
         ));
         Food meat = new Meat("Мясо", LocalDate.now(), LocalDate.now().minusDays(10), 399.99);
         controlQuality.addToStorage(meat);
-        Assert.assertEquals(meat.getPriceWithDiscount(),231.99, 0.01);
+        Assert.assertEquals(meat.getPriceWithDiscount(), 231.99, 0.01);
         assertThat(meat.getPercentLifeTimePassed(), is(100.0));
         assertThat(controlQuality.getStorages().get(1).getProducts().get(0), is(meat));
     }
 
     @Test
-    public void whenPercentLifeTimeMore100AndAddToTrash() {
+    public void whenPercentLifeTimeMore100ThenAddToTrash() {
         ControlQuality controlQuality = new ControlQuality(Arrays.asList(
                 new Warehouse(), new Shop(42), new Trash()
         ));
