@@ -7,16 +7,20 @@ import java.util.function.Predicate;
 public class Warehouse implements FoodStorage {
 
     private final List<Food> products = new ArrayList<>();
-    private final Predicate<Food> condition = food -> food.getPercentLifeTimePassed() < 25;
+    private final Predicate<Food> condition = food -> getPercentLifeTimePassed(food) < 25;
 
 
     @Override
-    public void add(Food food) {
-        products.add(food);
+    public boolean add(Food food) {
+      boolean rsl = false;
+       if (condition.test(food)) {
+           rsl = products.add(food);
+       }
+       return rsl;
     }
 
     public List<Food> getProducts() {
-        return products;
+        return List.copyOf(products);
     }
 
     public Predicate<Food> getCondition() {

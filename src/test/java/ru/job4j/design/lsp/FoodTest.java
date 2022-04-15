@@ -52,5 +52,8 @@ public class FoodTest {
         assertThat(milk.getPrice(), is(101.55));
         assertThat(milk.getDiscount(), is(22));
         Assert.assertEquals(milk.getPriceWithDiscount(), 79.21, 0.01);
+        milk.setDiscount(0);
+        assertThat(milk.getDiscount(), is(0));
+        assertThat(milk.getPriceWithDiscount(), is(101.55));
     }
 }

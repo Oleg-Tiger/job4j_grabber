@@ -1,14 +1,12 @@
 package ru.job4j.design.lsp;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public abstract class Food {
    private String name;
    private final LocalDate expiryDate;
    private final LocalDate createDate;
    private final Price price;
-   private int discount = 0;
 
     public Food(String name, LocalDate expiryDate, LocalDate createDate, double price) {
         if (expiryDate.isBefore(createDate) || LocalDate.now().isBefore(createDate)) {
@@ -18,12 +16,6 @@ public abstract class Food {
         this.expiryDate = expiryDate;
         this.createDate = createDate;
         this.price = new Price(price);
-    }
-
-    public double getPercentLifeTimePassed() {
-        long lifeTime = ChronoUnit.DAYS.between(this.getCreateDate(), this.getExpiryDate());
-        long lifeTimePassed = ChronoUnit.DAYS.between(this.getCreateDate(), LocalDate.now());
-        return (lifeTimePassed + 1) * 100.0 / (lifeTime + 1);
     }
 
     public String getName() {
@@ -43,44 +35,61 @@ public abstract class Food {
     }
 
     public double getPrice() {
-        return price.price;
+        return price.getPrice();
     }
 
     public double getPriceWithDiscount() {
-        return price.priceWithDiscount;
-    }
-
-    public void setPrice(double price) {
-        this.price.price = price;
-        if (discount == 0) {
-            this.price.priceWithDiscount = price;
-        } else {
-            setPriceWithDiscount();
-        }
+        return price.getPriceWithDiscount();
     }
 
     public int getDiscount() {
-        return discount;
+        return price.getDiscount();
+    }
+
+    public void setPrice(double price) {
+        this.price.setPrice(price);
+        Shop.setFoodPriceAndDiscount(this.price, this.price.getDiscount());
     }
 
     public void setDiscount(int discount) {
-        this.discount = discount;
-        setPriceWithDiscount();
+        Shop.setFoodPriceAndDiscount(this.price, discount);
     }
 
-    private void setPriceWithDiscount() {
-        int a = (int) (this.price.price * (100 - discount));
-        this.price.priceWithDiscount = a * 0.01;
-    }
-
-    private class Price {
+    public class Price {
 
         private double price;
         private double priceWithDiscount;
+        private int discount;
 
         private Price(double price) {
             this.price = price;
             this.priceWithDiscount = price;
+            this.discount = 0;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public double getPriceWithDiscount() {
+            return priceWithDiscount;
+        }
+
+        public void setPriceWithDiscount(double priceWithDiscount) {
+            this.priceWithDiscount = priceWithDiscount;
+        }
+
+
+        public int getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(int discount) {
+            this.discount = discount;
         }
     }
 }

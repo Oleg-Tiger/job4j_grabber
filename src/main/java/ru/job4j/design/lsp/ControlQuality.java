@@ -11,26 +11,17 @@ public class ControlQuality {
     }
 
     public void addToStorage(Food food) {
-        FoodStorage storage = checkCondition(food);
+        FoodStorage storage = null;
+        for (FoodStorage fs : storages) {
+            if (fs.getCondition().test(food)) {
+                storage = fs;
+                break;
+            }
+        }
         if (storage == null) {
            throw new IllegalArgumentException("Подходящее хранилище не найдено");
         }
         storage.add(food);
-    }
-
-    private FoodStorage checkCondition(Food food) {
-        FoodStorage rsl = null;
-        for (FoodStorage storage : storages) {
-           if (storage.getCondition().test(food)) {
-                rsl = storage;
-                break;
-            }
-        }
-        return rsl;
-        }
-
-    public List<FoodStorage> getStorages() {
-        return storages;
     }
 }
 
