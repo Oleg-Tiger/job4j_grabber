@@ -1,6 +1,5 @@
 package ru.job4j.design.lsp;
 
-import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDate;
 import java.time.Month;
@@ -51,9 +50,20 @@ public class FoodTest {
         milk.setDiscount(22);
         assertThat(milk.getPrice(), is(101.55));
         assertThat(milk.getDiscount(), is(22));
-        Assert.assertEquals(milk.getPriceWithDiscount(), 79.21, 0.01);
+        assertThat(milk.getPriceWithDiscount(), is(79.20));
         milk.setDiscount(0);
-        assertThat(milk.getDiscount(), is(0));
         assertThat(milk.getPriceWithDiscount(), is(101.55));
     }
+
+    @Test
+    public void whenChangeDiscountAndPriceThenDiscountPriceChangesAndRounded() {
+        LocalDate create = LocalDate.now().minusDays(20);
+        LocalDate expiry = LocalDate.now().plusDays(65);
+        Food milk = new Milk("Молоко", expiry, create, 100);
+        milk.setDiscount(20);
+        milk.setPrice(12.34);
+        assertThat(milk.getPrice(), is(12.34));
+        assertThat(milk.getPriceWithDiscount(), is(9.87));
+    }
+
 }

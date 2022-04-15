@@ -1,5 +1,7 @@
 package ru.job4j.design.lsp;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -48,8 +50,9 @@ public class Shop implements FoodStorage {
         if (discount == 0) {
             price.setPriceWithDiscount(price.getPrice());
         } else {
-            int a = (int) (price.getPrice() * (100 - discount));
-            price.setPriceWithDiscount(a * 0.01);
+            double a = (price.getPrice() * (100 - discount) * 0.01);
+            BigDecimal result = new BigDecimal(a);
+            price.setPriceWithDiscount(result.setScale(2, RoundingMode.DOWN).doubleValue());
         }
     }
 }
