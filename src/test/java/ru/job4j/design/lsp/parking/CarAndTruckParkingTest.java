@@ -1,6 +1,5 @@
 package ru.job4j.design.lsp.parking;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import java.util.List;
 import static org.hamcrest.Matchers.is;
@@ -8,7 +7,6 @@ import static org.junit.Assert.*;
 
 public class CarAndTruckParkingTest {
 
-    @Ignore
     @Test
     public void whenParkingSize1And2Then1TruckAnd2CarAddedAndCheckTransportList() {
         Parking parking = new CarAndTruckParking(1, 2);
@@ -25,7 +23,6 @@ public class CarAndTruckParkingTest {
         assertThat(parking.getTransports(), is(expected));
     }
 
-    @Ignore
     @Test
     public void whenParkingSize1And2Then2TruckAddedAndCheckTransportList() {
         Parking parking = new CarAndTruckParking(1, 2);
@@ -40,7 +37,6 @@ public class CarAndTruckParkingTest {
         assertThat(parking.getTransports(), is(expected));
     }
 
-    @Ignore
     @Test
     public void whenParkingSize0And1Then1CarAddedAnd1CarRemovedAnd1CarAdded() {
         Parking parking = new CarAndTruckParking(0, 1);
@@ -52,7 +48,6 @@ public class CarAndTruckParkingTest {
         assertTrue(parking.addTransport(car2));
     }
 
-    @Ignore
     @Test
     public void whenParkingSize1And0Then1TruckAddedAnd1TruckRemovedAnd1TruckAdded() {
         Parking parking = new CarAndTruckParking(1, 0);
@@ -64,7 +59,6 @@ public class CarAndTruckParkingTest {
         assertTrue(parking.addTransport(truck2));
     }
 
-    @Ignore
     @Test
     public void whenParkingSize0And3Then1TruckAddedAnd1TruckRemovedAnd1TruckAdded() {
         Parking parking = new CarAndTruckParking(0, 3);
@@ -76,7 +70,6 @@ public class CarAndTruckParkingTest {
         assertTrue(parking.addTransport(truck2));
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
     public void whenRemovedCarNotAddedOnParking() {
         Parking parking = new CarAndTruckParking(0, 3);
