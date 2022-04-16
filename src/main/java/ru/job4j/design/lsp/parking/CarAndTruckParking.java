@@ -63,9 +63,8 @@ public class CarAndTruckParking implements Parking {
     private boolean addTruckOnCarPlaces(Transport transport) {
         int size = transport.getSize();
         if (size <= carPlaces) {
-            transports.add(transport);
             carPlaces -= size;
-            return true;
+            return transports.add(transport);
         }
         return false;
     }
