@@ -2,13 +2,16 @@ package ru.job4j.design.lsp.parking;
 
 import java.util.Objects;
 
-public class Car implements Transport {
+public class Truck implements Transport {
     private final String number;
-    private final int size = 1;
+    private final int size;
 
-    public Car(String number) {
+
+    public Truck(String number, int size) {
         this.number = number;
+        this.size = size;
     }
+
 
     @Override
     public String getNumber() {
@@ -17,7 +20,7 @@ public class Car implements Transport {
 
     @Override
     public int getSize() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -28,8 +31,8 @@ public class Car implements Transport {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Car car = (Car) o;
-        return Objects.equals(number, car.number);
+        Truck truck = (Truck) o;
+        return Objects.equals(number, truck.number);
     }
 
     @Override
