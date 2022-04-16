@@ -56,8 +56,8 @@ public class CarAndTruckParkingTest {
     @Test
     public void whenParkingSize1And0Then1TruckAddedAnd1TruckRemovedAnd1TruckAdded() {
         Parking parking = new CarAndTruckParking(1, 0);
-        Transport truck = new Truck("a777aa77",9);
-        Transport truck2 = new Truck("a444aa77",10);
+        Transport truck = new Truck("a777aa77", 9);
+        Transport truck2 = new Truck("a444aa77", 10);
         assertTrue(parking.addTransport(truck));
         assertFalse(parking.addTransport(truck2));
         parking.removeTransport(truck);
@@ -68,8 +68,8 @@ public class CarAndTruckParkingTest {
     @Test
     public void whenParkingSize0And3Then1TruckAddedAnd1TruckRemovedAnd1TruckAdded() {
         Parking parking = new CarAndTruckParking(0, 3);
-        Transport truck = new Truck("a777aa77",3);
-        Transport truck2 = new Truck("a444aa77",3);
+        Transport truck = new Truck("a777aa77", 3);
+        Transport truck2 = new Truck("a444aa77", 3);
         assertTrue(parking.addTransport(truck));
         assertFalse(parking.addTransport(truck2));
         parking.removeTransport(truck);
@@ -80,8 +80,8 @@ public class CarAndTruckParkingTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenRemovedCarNotAddedOnParking() {
         Parking parking = new CarAndTruckParking(0, 3);
-        Transport truck = new Truck("a777aa77",3);
-        Transport truck2 = new Truck("a444aa77",3);
+        Transport truck = new Truck("a777aa77", 3);
+        Transport truck2 = new Truck("a444aa77", 3);
         parking.addTransport(truck);
         parking.removeTransport(truck2);
     }
