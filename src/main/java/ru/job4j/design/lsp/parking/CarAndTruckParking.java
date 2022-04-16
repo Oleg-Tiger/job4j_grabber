@@ -21,4 +21,16 @@ public class CarAndTruckParking implements Parking {
     public void removeTransport(Transport transport) {
 
     }
+
+    public int getTruckPlaces() {
+        return truckPlaces;
+    }
+
+    public int getCarPlaces() {
+        return carPlaces;
+    }
+
+    public List<Transport> getTransports() {
+        return List.copyOf(transports);
+    }
 }
