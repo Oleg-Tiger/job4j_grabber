@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Car implements Transport {
     private final String number;
-    private final int size = 1;
+    public static final int SIZE = 1;
 
     public Car(String number) {
         this.number = number;
@@ -17,7 +17,7 @@ public class Car implements Transport {
 
     @Override
     public int getSize() {
-        return size;
+        return SIZE;
     }
 
     @Override

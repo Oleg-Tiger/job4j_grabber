@@ -1,21 +1,22 @@
-package ru.job4j.design.lsp;
+package ru.job4j.design.lsp.foodstorage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class Trash implements FoodStorage {
+public class Warehouse implements FoodStorage {
 
     private final List<Food> products = new ArrayList<>();
-    private final Predicate<Food> condition = food -> getPercentLifeTimePassed(food) > 100;
+    private final Predicate<Food> condition = food -> getPercentLifeTimePassed(food) < 25;
+
 
     @Override
     public boolean add(Food food) {
-        boolean rsl = false;
-        if (condition.test(food)) {
-            rsl = products.add(food);
-        }
-        return rsl;
+      boolean rsl = false;
+       if (condition.test(food)) {
+           rsl = products.add(food);
+       }
+       return rsl;
     }
 
     public List<Food> getProducts() {

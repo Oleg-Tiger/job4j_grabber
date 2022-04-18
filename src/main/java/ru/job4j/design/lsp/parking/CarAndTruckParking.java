@@ -32,16 +32,17 @@ public class CarAndTruckParking implements Parking {
     }
 
     @Override
-    public void removeTransport(Transport transport) {
+    public boolean removeTransport(Transport transport) {
         boolean rsl = transports.remove(transport);
         if (!rsl) {
             throw new IllegalArgumentException("Такой машины на парковке нет!!!");
         }
-        if (transport.getSize() == 1) {
+        if (transport.getSize() == Car.SIZE) {
             carPlaces++;
         } else {
             truckPlaces += transport.getSize();
         }
+        return true;
     }
 
     private boolean addCarOnCarPlace(Transport transport) {

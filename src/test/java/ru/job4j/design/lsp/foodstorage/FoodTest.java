@@ -1,6 +1,7 @@
-package ru.job4j.design.lsp;
+package ru.job4j.design.lsp.foodstorage;
 
 import org.junit.Test;
+
 import java.time.LocalDate;
 import java.time.Month;
 import static org.junit.Assert.assertThat;
