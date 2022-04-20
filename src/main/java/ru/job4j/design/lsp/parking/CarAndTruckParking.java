@@ -15,7 +15,7 @@ public class CarAndTruckParking implements Parking {
     @Override
     public boolean addTransport(Transport transport) {
         int size = transport.getSize();
-        if (size == 1) {
+        if (size == Car.SIZE) {
            return addCarOnCarPlace(transport);
         }
         if (addTruckOnTruckPlace(transport)) {
@@ -73,7 +73,7 @@ public class CarAndTruckParking implements Parking {
     private Optional<Transport> checkTruckWithSmallerSize(int size) {
         transports.sort(Comparator.comparing(Transport::getSize));
         return transports.stream()
-                .filter(tr -> tr.getSize() > 1 && tr.getSize() < size && tr.getSize() <= carPlaces)
+                .filter(tr -> tr.getSize() > Car.SIZE && tr.getSize() < size && tr.getSize() <= carPlaces)
                 .findFirst();
     }
 
