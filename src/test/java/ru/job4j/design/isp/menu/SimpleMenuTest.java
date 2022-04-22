@@ -39,6 +39,22 @@ public class SimpleMenuTest {
     }
 
     @Test
+    public void whenAddAndCheckDelegate() {
+        Menu menu = new SimpleMenu();
+        StubActionDelegate actionDelegate = new StubActionDelegate();
+        menu.add(Menu.ROOT, "Сходить в магазин", actionDelegate);
+        menu.select("Сходить в магазин");
+        assertThat(actionDelegate.getCount(), is(1));
+        menu.add(Menu.ROOT, "Покормить собаку", actionDelegate);
+        menu.add("Сходить в магазин", "Купить продукты", actionDelegate);
+        menu.select("Купить продукты");
+        assertThat(actionDelegate.getCount(), is(2));
+        menu.select("Покормить собаку");
+        assertThat(actionDelegate.getCount(), is(3));
+
+    }
+
+    @Test
     public void whenItemNotExistThenNotFound() {
         Menu menu = new SimpleMenu();
         menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);

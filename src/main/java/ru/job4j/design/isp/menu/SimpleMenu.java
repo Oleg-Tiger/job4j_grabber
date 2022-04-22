@@ -26,6 +26,7 @@ public class SimpleMenu implements Menu {
             return Optional.empty();
         }
         ItemInfo fromOptional = itemInfo.get();
+        fromOptional.menuItem.getActionDelegate().delegate();
         return Optional.of(new MenuItemInfo(fromOptional.menuItem, fromOptional.number));
     }
 
