@@ -8,28 +8,62 @@ public class SimpleMenu implements Menu {
 
     @Override
     public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
-        return false;
+        MenuItem menuItem = new SimpleMenuItem(childName, actionDelegate);
+        if (parentName == Menu.ROOT) {
+            return rootElements.add(menuItem);
+        }
+        Optional<ItemInfo> itemInfo = findItem(parentName);
+        if (itemInfo.isEmpty()) {
+            throw new IllegalArgumentException("The parent directory does not exist");
+        }
+        return itemInfo.get().menuItem.getChildren().add(menuItem);
     }
 
     @Override
     public Optional<MenuItemInfo> select(String itemName) {
-        return null;
+        Optional<ItemInfo> itemInfo = findItem(itemName);
+        if (itemInfo.isEmpty()) {
+            return Optional.empty();
+        }
+        ItemInfo fromOptional = itemInfo.get();
+        return Optional.of(new MenuItemInfo(fromOptional.menuItem, fromOptional.number));
     }
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        return null;
+        return new Iterator<>() {
+
+            private final DFSIterator dfsIterator = new DFSIterator();
+
+            @Override
+            public boolean hasNext() {
+                return dfsIterator.hasNext();
+            }
+
+            @Override
+            public MenuItemInfo next() {
+                ItemInfo itemInfo = dfsIterator.next();
+                return new MenuItemInfo(itemInfo.menuItem, itemInfo.number);
+            }
+        };
     }
 
     private Optional<ItemInfo> findItem(String name) {
-        return null;
+        DFSIterator iterator = new DFSIterator();
+        while (iterator.hasNext()) {
+            ItemInfo rsl = iterator.next();
+            if (rsl.menuItem.getName().equals(name)) {
+                return Optional.of(rsl);
+            }
+        }
+        return Optional.empty();
     }
 
     private static class SimpleMenuItem implements MenuItem {
 
-        private String name;
-        private List<MenuItem> children = new ArrayList<>();
-        private ActionDelegate actionDelegate;
+        private final String name;
+        private final List<MenuItem> children = new ArrayList<>();
+        private final ActionDelegate actionDelegate;
 
         public SimpleMenuItem(String name, ActionDelegate actionDelegate) {
             this.name = name;
