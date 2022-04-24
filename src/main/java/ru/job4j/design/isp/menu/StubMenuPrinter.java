@@ -12,7 +12,7 @@ public class StubMenuPrinter implements MenuPrinter {
         String indent = " ";
         for (Menu.MenuItemInfo info : menu) {
             String number = info.getNumber();
-            String name = info.getNumber().concat(info.getName());
+            String name = number.concat(info.getName());
             pointsCount = number.split("\\.").length;
             rsl = indent.repeat((pointsCount - 1) * 3).concat(name);
             menuFormatted.append(rsl).append(System.lineSeparator());
