@@ -1,7 +1,5 @@
 package ru.job4j.design.isp.menu;
 
-import java.util.Arrays;
-
 public class StubMenuPrinter implements MenuPrinter {
 
     private StringBuilder menuFormatted;
@@ -11,17 +9,12 @@ public class StubMenuPrinter implements MenuPrinter {
         menuFormatted = new StringBuilder();
         int pointsCount;
         String rsl;
+        String indent = " ";
         for (Menu.MenuItemInfo info : menu) {
             String number = info.getNumber();
-            String name = number.concat(info.getName());
+            String name = info.getNumber().concat(info.getName());
             pointsCount = number.split("\\.").length;
-            if (pointsCount == 1) {
-                rsl =  name;
-            } else {
-                char[] indent = new char[(pointsCount - 1) * 3];
-                Arrays.fill(indent, ' ');
-                rsl = new String(indent).concat(name);
-            }
+            rsl = indent.repeat((pointsCount - 1) * 3).concat(name);
             menuFormatted.append(rsl).append(System.lineSeparator());
         }
     }

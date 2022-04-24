@@ -39,18 +39,24 @@ public class SimpleMenuTest {
     }
 
     @Test
+    public void whenChildAlreadyExistThenNotAdded() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Съездить в гипермаркет", STUB_ACTION);
+        assertTrue(menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION));
+        assertFalse(menu.add("Съездить в гипермаркет", "Купить продукты", STUB_ACTION));
+    }
+
+    @Test
     public void whenAddAndCheckDelegate() {
         Menu menu = new SimpleMenu();
         StubActionDelegate actionDelegate = new StubActionDelegate();
         menu.add(Menu.ROOT, "Сходить в магазин", actionDelegate);
-        menu.select("Сходить в магазин");
-        assertThat(actionDelegate.getCount(), is(1));
         menu.add(Menu.ROOT, "Покормить собаку", actionDelegate);
-        menu.add("Сходить в магазин", "Купить продукты", actionDelegate);
-        menu.select("Купить продукты");
+        menu.select("Сходить в магазин").get().getActionDelegate().delegate();
+        assertThat(actionDelegate.getCount(), is(1));
+        menu.select("Покормить собаку").get().getActionDelegate().delegate();
         assertThat(actionDelegate.getCount(), is(2));
-        menu.select("Покормить собаку");
-        assertThat(actionDelegate.getCount(), is(3));
 
     }
 
