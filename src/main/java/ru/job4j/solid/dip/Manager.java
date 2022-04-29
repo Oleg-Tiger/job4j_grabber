@@ -18,7 +18,6 @@ public class Manager {
     private List<Worker> workers;
 
     public void manage(Worker worker) {
-        // some logic...
         worker.work();
     }
 

@@ -14,12 +14,12 @@ public class PersonListStorage {
     }
 
     public boolean addPerson(Person person) {
-        //some logic...
+
         return true;
     }
 
     public boolean removePerson(Person person) {
-        //some logic...
+
         return true;
     }
 

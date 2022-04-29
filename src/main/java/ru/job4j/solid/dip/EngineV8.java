@@ -10,7 +10,6 @@ public class EngineV8 {
     }
 
     public void startEngine() {
-        //some logic...
     }
 
 }

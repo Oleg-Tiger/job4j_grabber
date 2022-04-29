@@ -26,11 +26,11 @@ public class SportCar implements Car {
     @Override
     public void drive() {
         engine.startEngine();
-         //some logic...
+
     }
 
     @Override
     public void brake() {
-        //some logic...
+
     }
 }
