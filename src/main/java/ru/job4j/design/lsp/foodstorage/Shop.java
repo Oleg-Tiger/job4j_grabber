@@ -29,6 +29,17 @@ public class Shop implements FoodStorage {
         return rsl;
     }
 
+    @Override
+    public boolean remove(Food food) {
+        if (!condition.test(food)) {
+            return products.remove(food);
+        }
+        if (getPercentLifeTimePassed(food) > 75) {
+            food.setDiscount(discount);
+        }
+        return false;
+    }
+
     public List<Food> getProducts() {
         return List.copyOf(products);
     }

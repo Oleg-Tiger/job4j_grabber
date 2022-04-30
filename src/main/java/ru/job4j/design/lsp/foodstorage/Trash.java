@@ -18,6 +18,14 @@ public class Trash implements FoodStorage {
         return rsl;
     }
 
+    @Override
+    public boolean remove(Food food) {
+        if (!condition.test(food)) {
+            return products.remove(food);
+        }
+        return false;
+    }
+
     public List<Food> getProducts() {
         return List.copyOf(products);
     }

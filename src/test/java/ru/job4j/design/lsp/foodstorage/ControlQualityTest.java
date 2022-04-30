@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
@@ -86,4 +88,38 @@ public class ControlQualityTest  {
         assertThat(trash.getProducts().get(0), is(meat));
     }
 
+    @Test
+    public void whenResort() {
+        LocalDate now = LocalDate.now();
+        FoodStorage warehouse = new Warehouse();
+        FoodStorage shop = new Shop(25);
+        FoodStorage trash = new Trash();
+        ControlQuality controlQuality = new ControlQuality(Arrays.asList(
+           warehouse, shop, trash
+        ));
+        Food meat = new Meat("Телятина", now.plusDays(22), now.minusDays(4), 100.0);
+        Food meat2 = new Meat("Свинина", now.plusDays(14), now.minusDays(4), 100.0);
+        Food milk =  new Milk("Молоко", now.plusDays(1), now.minusDays(3), 100.0);
+        Food milk2 = new Milk("Топлёное молоко", now.minusDays(1), now.minusDays(10), 100.0);
+        controlQuality.addToStorage(meat);
+        controlQuality.addToStorage(meat2);
+        controlQuality.addToStorage(milk);
+        controlQuality.addToStorage(milk2);
+        assertThat(warehouse.getProducts(), is(List.of(meat)));
+        assertThat(shop.getProducts(), is(List.of(meat2, milk)));
+        assertThat(trash.getProducts(), is(List.of(milk2)));
+
+        meat.setExpiryDate(now.plusDays(14));
+        meat2.setExpiryDate(now.plusDays(1));
+        milk.setExpiryDate(now.minusDays(1));
+
+        controlQuality.resort();
+
+        assertThat(shop.getProducts(), is(List.of(meat2, meat)));
+        assertThat(trash.getProducts(), is(List.of(milk2, milk)));
+        assertThat(meat.getPriceWithDiscount(), is(100.0));
+        assertThat(meat2.getPriceWithDiscount(), is(75.0));
+
+
+    }
 }

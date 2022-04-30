@@ -1,5 +1,6 @@
 package ru.job4j.design.lsp.foodstorage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControlQuality {
@@ -22,6 +23,18 @@ public class ControlQuality {
            throw new IllegalArgumentException("Подходящее хранилище не найдено");
         }
         storage.add(food);
+    }
+
+    public void resort() {
+        List<Food> products = new ArrayList<>();
+        for (FoodStorage storage : storages) {
+            for (Food food : storage.getProducts()) {
+                if (storage.remove(food)) {
+                    products.add(food);
+                }
+            }
+        }
+        products.forEach(this::addToStorage);
     }
 }
 

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public abstract class Food {
    private String name;
-   private final LocalDate expiryDate;
+   private LocalDate expiryDate;
    private final LocalDate createDate;
    private final Price price;
 
@@ -53,6 +53,10 @@ public abstract class Food {
 
     public void setDiscount(int discount) {
         Shop.setFoodPriceAndDiscount(this.price, discount);
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public class Price {

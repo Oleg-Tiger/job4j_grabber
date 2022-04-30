@@ -9,7 +9,6 @@ public class Warehouse implements FoodStorage {
     private final List<Food> products = new ArrayList<>();
     private final Predicate<Food> condition = food -> getPercentLifeTimePassed(food) < 25;
 
-
     @Override
     public boolean add(Food food) {
       boolean rsl = false;
@@ -17,6 +16,14 @@ public class Warehouse implements FoodStorage {
            rsl = products.add(food);
        }
        return rsl;
+    }
+
+    @Override
+    public boolean remove(Food food) {
+        if (!condition.test(food)) {
+            return products.remove(food);
+        }
+        return false;
     }
 
     public List<Food> getProducts() {

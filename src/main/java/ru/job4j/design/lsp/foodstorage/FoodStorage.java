@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 public interface FoodStorage {
 
+    boolean remove(Food food);
     boolean add(Food food);
     Predicate<Food> getCondition();
     List<Food> getProducts();
